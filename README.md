@@ -48,14 +48,28 @@ pow(26, word.length() - i - 1)
 Essentially, you are making the first letter be raised to the biggest power and the letters following that have a smaller and smaller power as we move forward. As a result, our new algorithm is as follows:
 
 ```
+int order = 0;
+in num = 0;
 for (int i = 0; i < word.length(); i++){
-    num = pow(26, word.length() - i - 1) * (word[j] - 'a' + 1);
+    num = pow(26, word.length() - i - 1) * (word[i] - 'a' + 1);
     order = order + num;
 }
+return order;
 ```
-Now credits to the remainder of the algorithm go to the user of the following post on stackoverflow: 
+Now credits to the remainder of the algorithm go to the user of the following post on stackoverflow: [Post](https://stackoverflow.com/questions/16521148/string-to-unique-integer-hashing)
 
-[Post](https://stackoverflow.com/questions/16521148/string-to-unique-integer-hashing)
+Now we can have the following values:
+```
+"apple" = 749325
+"z" = 19482450
+```
+
+This makes sense as 'z' is indeed lexicographically greater than 'apple'.
+
+There is a hiccup though, an integer in c++ (32 bits), can only go up to 2147483647. This limits us to log27(2^32) letters. That is only 6 letters. What if we use a long int? a long long int? a __int128?
+
+Well the max we can do with a __int128 is log27(2^128) which is 26. That is 26 letters which should be able to cover any word. Well, what about longer strings? We could definetly use a BigInt library for that, but for now, we're going to settle for a max size of 26 chrachters.
+
 
 
 
