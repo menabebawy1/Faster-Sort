@@ -2,7 +2,7 @@
 
 Ever since I took my first Data Structures and Algorithms course, I became fascinated with sorting algorithms. And given that sorting algorithms are a dozen a dime, I thought to myself, "Why not create my own?". This project is exactly an attempt at that. If you want the final version of this algorithm scroll all the way to the bottom. But for now, let's start with the seed idea that sparked the new algorithm.
 
-### IDEA #1: sorting numbers is faster than sorting strings. So, if we could come up with a way to convert strings to numbers, we could theoratically sort them much faster.
+### Idea #1: sorting numbers is faster than sorting strings. So, if we could come up with a way to convert strings to numbers, we could theoratically sort them much faster.
 
 When comparing strings such as Apple and Application, we have to go all the way to the 5th letter to realize that 'e' is less than 'i' and therefore Apple is less than Application. However, if these words were converted to a number the comparison would be instant.
 
@@ -69,6 +69,51 @@ This makes sense as 'z' is indeed lexicographically greater than 'apple'.
 There is a hiccup though, an integer in c++ (32 bits), can only go up to 2147483647. This limits us to log27(2^32) letters. That is only 6 letters. What if we use a long int? a long long int? a __int128?
 
 Well the max we can do with a __int128 is log27(2^128) which is 26. That is 26 letters which should be able to cover any word. Well, what about longer strings? We could definetly use a BigInt library for that, but for now, we're going to settle for a max size of 26 chrachters.
+
+So now the algorithm should be as follows:
+We should  be deciding the biggest power for each word based on the size of the longest word. Otherwise, we will have inconsistent powers and the sorting will be off. So, for the first step:
+1. Find the size of the biggest string
+
+We also need to keep each number value attached to each string, so if we change the position of the number when sorting it, we will subsequently change the position of the string:
+2. Create a vector of pairs with each pair having a string and the number value for that string
+3. Calculate the number value for each string
+4. Sort the numbers
+
+The following is the algorithm:
+
+```
+void numSort(vector<string>& words){
+	if(words.size() == 0) return;
+	vector<pair<string, __int128>> copy;
+
+	//find biggest string
+	int maxSize = 0;
+	for(auto word: words){
+		if(word.length() > maxSize) maxSize = word.length();
+	}
+		
+	//calculate the number for each word	
+	string word;
+	__int128 order;
+	for(int i = 0; i < words.size(); i++){
+		word = words[i];
+		order = 0;
+		__int128 num = 0;
+		for (int j = 0; j < word.length(); j++){
+			num = pow(27, maxSize - j - 1)*(word[j] - 'a' + 1);
+			order = order + num;
+		}
+    	copy.push_back({word, order});
+	}
+
+	//sort the copy and put it in the original
+	sort(copy.begin(), copy.end(), sortbysec);
+	for(int i = 0; i < copy.size(); i++){
+		words[i] = copy[i].first;
+	}	
+}
+```
+
 
 
 
