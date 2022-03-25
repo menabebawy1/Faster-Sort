@@ -13,15 +13,23 @@ Well let's start with an excel sheet, that's where I got the idea, that's right 
 So how do we get there? Let's take a look at the examples:
 
 ```
-A = 0
-B = 1
-C = 2
+A = 1
+B = 2
+C = 3
 AA = 27
 AB = 28
 AAA = 677
 ```
 
-If you notice the pattern here, we multiply by an order of 26 every time we add another letter:
+If you notice the pattern here, we multiply by an order of 26 every time we add another letter, then we add the value of the new letter, and since we are starting at index 1, we add one to the result:
+
+```
+ABC
+A = 0*26 + value of letter(0) + 1 = 1
+B = 1*26 + value of letter(1) + 1 = 28
+C = 28*26 + value of letter(2) + 1 = 731
+```
+As a result, we have the following formula:
 
 ```
 int order = 0;
