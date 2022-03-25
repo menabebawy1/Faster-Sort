@@ -38,5 +38,27 @@ for (auto letter : word)
 return order;
 ```
 
+Now this formula will produce a distinct value for each string, however, they will not be in order. We can't then sort the strings based on their number value. Ex: "apple" will be greater than the value for "z". So how do we fix this? What if we give the first letter the greatest value?
+
+How do we do this? We can add the following to the number value:
+
+```
+pow(26, word.length() - i - 1)
+```
+Essentially, you are making the first letter be raised to the biggest power and the letters following that have a smaller and smaller power as we move forward. As a result, our new algorithm is as follows:
+
+```
+for (int i = 0; i < word.length(); i++){
+    num = pow(26, word.length() - i - 1) * (word[j] - 'a' + 1);
+    order = order + num;
+}
+```
+Now credits to the remainder of the algorithm go to the user of the following post on stackoverflow: 
+
+[Post](https://stackoverflow.com/questions/16521148/string-to-unique-integer-hashing)
+
+
+
+
 
 
