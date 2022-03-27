@@ -144,7 +144,8 @@ Now this ofcourse will only work for any string that is up to 26 charachters lon
 
 So how can we uses this strategy to better sort strings without a limitation on its length? Answer: Instead of completely converting the string into an integer value, we can convert the first smaller part of it. This will give strings of similar length, a similar value. We can then put these strings together into buckets, and then sort these buckets. Once we do that, it should theoratically make the algorithm much faster. Instaed of the O(nlog(n)) run time, if the words are distributed well, we should have a run time of O(nlog(n)/k), where k is the number of buckets.
 
-
+<br>
+<br>
 
 ### Version 2.0: Instaed of completely converting the string to integers, we partially convert them and put them into buckets based on the resulting value.
 --- 
@@ -207,8 +208,8 @@ As we can be seen, based on this data, chars 3, 4, & 5 seem to be optimal with c
 
 Now before testing this algorithm, against the C++ STL QuickSort, I want to experiment further with it. I feel that it should have performed faster. But why is it slower? I believe sorting a linkedlist takes more time due to the cost of traversing the list. This takes us to the next improvement!
 
-
-
+<br>
+<br>
 
 ### Version 3.0: Instaed of having linkedlist buckets, we will have vector buckets to see if speed improves.
 ---
@@ -256,8 +257,8 @@ Based on this data and the graph, we can see that the algorithm is almost twice 
 
 And now for one final tweak: If you look at our algorithm, it uses (26^4) = 456,976 buckets. So many of our buckets such as bucket 'zzzz' or bucket 'fwbe' will be unused. Although the number of buckets is a constant, it can be greatly decreased.
 
-
-
+<br>
+<br>
 
 ### Version 4.0: By changing our buckets container to a hashmap we can greatly decrease the number of buckets.
 ---
