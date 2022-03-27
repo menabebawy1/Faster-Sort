@@ -295,10 +295,10 @@ Admittedly the algorithm is about 20% slower than the vector container due to ac
 This is great! I created an algorithm that is twice as fast!
 
 Final thoughts:
-Is QuickSort now disposable? Ofcourse no!, The answer ism "It depends". What is the user looking for?
+Is QuickSort now disposable? Ofcourse not! The answer is, "It depends". What is the user looking for?
 
 - If the user is constrained by space, they can use QuickSort which is quite fast and uses only O(log(n)) space.
 - But, if the user is looking for maximum speed, they can use version 3.0 of this algorithm and achieve maximum speed with a space complexity of O(n).
 - Finally if the user is looking for something in between, they can use version 4.0 which is faster than QuickSort and uses less space than Version 3.0 of the algorithm.
 
-Overall, I'd say this was quiet a nice tunrnout.
+Overall, I'd say this was quiet a nice tunrnout :)
