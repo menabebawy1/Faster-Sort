@@ -71,7 +71,7 @@ Now we can have the following values:
 
 This makes sense as 'z' is indeed lexicographically greater than 'apple'.
 
-There is a hiccup though, an integer in c++ (32 bits), can only go up to 2147483647. This limits us to log27(2^32) letters. That is only 6 letters. What if we use a long int? a long long int? a __int128?
+There is a hiccup though. An integer in C++ (32 bits), can only go up to 2147483647. This limits us to log27(2^32) letters. That is only 6 letters. A 7 letter word would not fit inside an int if we use our algorithm to convert it to a number. What if we use a long int? a long long int? a __int128?
 
 Well the max we can do with a __int128 is log27(2^128) which is 26. That is 26 letters which should be able to cover any word. Well, what about longer strings? We could definetly use a BigInt library for that, but for now, we're going to settle for a max size of 26 chrachters. Let's write an algorithm that is capable of sorting any real word, which should be less than 26 in length.
 
