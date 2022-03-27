@@ -1,6 +1,6 @@
-# Faster-Sort
+# Creating an algorithm 2x faster than the C++ STL QuickSort!
 
-Ever since I took my first Data Structures and Algorithms course, I became fascinated with sorting algorithms. And given that sorting algorithms are a dozen a dime, I thought to myself, "Why not create my own?". This project is exactly an attempt at that. If you want the final version of this algorithm scroll all the way to the bottom. But for now, let's start with the seed idea that sparked the new algorithm.
+Ever since I took my first Data Structures and Algorithms course, I became fascinated with sorting algorithms. And given that sorting algorithms are a dime a dozen, I thought "Why not create my own?". This project is exactly an attempt at that. If you want the final version of this algorithm scroll all the way to the bottom. But for now, let's start with the seed idea that sparked the new algorithm.
 
 ### Version 1.0: sorting numbers is faster than sorting strings. So, if we could come up with a way to convert strings to numbers, we could theoratically sort them much faster.
 
@@ -234,21 +234,61 @@ We will stick with the implementation of a vector of vectors. Let's now compare 
 
 
 
-![Data for Char](/images/vectorlistdata.png)
+![Data for Char](/images/hashdata.png)
 
-![Chart for Char](/images/vectorlistchart.png)
+![Chart for Char](/images/hashchart.png)
+
+Based on this data and the graph, we can see that the algorithm is almost twice as fast and it works for all strings, not just ones that are up to 26 charachters!
+
+And now for one final tweak: If you look at our algorithm it uses (26^4) = 456976 buckets. So many of our buckets such as bucket 'zzzz' or bucket 'kaaa' will be unused. Although the number of buckets is a constant, it can be greatly decreased.
+
+### Version 4.0: By changing our buckets container to a hashmap we can greatly decrease the number of buckets.
+
+This is another very simple change. We have optimized so much for run time and not as much for space. We can change this here. Just change our container to a hashmap. Calculate the integer value for each string. If it already exists in the hashmap, then insert it into the proper bucket. If not, then create a new bucket.
+
+This leads us to our final algorithm:
+
+```
+void bucketSort4h(vector<string> &strings){
+	int size = 4;
+	unordered_map<int, vector<string>> buckets;
+	int num;
+	int min_ = INT_MAX;
+	int max_ = INT_MIN;
+	for(auto string: strings){
+		num = 0;
+		for(int i = 0; i < string.length() && i < size; i++){
+			num += (string[i]-'a')*pow(26, size-i-1);
+		}
+		buckets[num].push_back(string);
+		min_ = min(min_, num);
+		max_ = max(max_, num);
+	}
+	int index = 0;
+	for(int i = min_; i <= max_; i++){
+		auto it = buckets.find(i);
+		if(it != buckets.end()){
+			sort(it->second.begin(), it->second.end());
+			for(auto num: it->second){
+				strings[index] = num;
+				index++;
+			}
+		}
+	}
+}
+```
+Now, how is the run time?
+
+![Data for Char](/images/mapdata.png)
+
+![Chart for Char](/images/mapchart.png)
+
+Admittedly the algorithm is about 20% slower due to accessing the hashmap. Although, it is theoratically O(1) same as a vector O(1). In practice, it is slightly slower. However, our number of buckets for each data point has gone down to about 10,000 buckets. That's about 46x less space.
 
 
+Final thoughts:
+Is QuickSort now disposable? Ofcourse not, the answer is "It depends". What is the user looking for?
 
-
-
-
-
-
-
-
-
-
-
-
-
+- If the user is constrained by space, they can use QuickSort which is quite fast and uses only O(log(n)) space.
+- But, if the user is looking for speed, they can use version 3.0 of this algorithm and achieve maximum speed with a space complexity of O(n).
+- Finally if the user is looking for something in between, they can use version 4.0 which is faster than QuickSort and uses less space than Version 3.0 of the algorithm.
