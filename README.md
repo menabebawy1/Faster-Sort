@@ -118,10 +118,10 @@ void numSort(vector<string>& words){
 }
 ```
 
-Note: for word generation, I downloaded a word file with every word in the dictionary and picked random words for it for each value of the vector to be sorted.
+Note: for word generation, I downloaded a word file with every word in the dictionary and picked random words for each value of the vector to be sorted.
 
 Now is this algorithm faster? Well let's run it against the state of the art C++ STL QuickSort.
-But for how many words? Well the fastest sorting algorithms for strings are QuickSort for a smaller set of data and BurstSort for bigger sets of data. QuickSort runs in O(nlog(n)) time and BurstSort which uses a Trie data structure and runs in O(n*|S|) time where |S| is the size of the word. Now, I quickly computed the average size of a word in the dictionary to be 7.2 in length. Now setting the 2 runtimes equal to each other, we can figure out that on average BurstSort starts becoming faster than QuickSort at n * 7.2 = n log(n) which is about 17,000,000.
+But for how many words? Well the fastest sorting algorithms for strings are QuickSort for a smaller set of data and BurstSort for bigger sets of data. QuickSort runs in O(nlog(n)) time and BurstSort which uses a Trie data structure and runs in O(n*|S|) time where |S| is the size of the word. Now, I quickly computed the average size of a word in the dictionary to be 7.2 in length. Now setting the 2 runtimes equal to each other, we can figure out that on average BurstSort starts becoming faster than QuickSort at n*7.2 = n*log(n) which is about 17,000,000.
 
 
 
