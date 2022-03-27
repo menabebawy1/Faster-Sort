@@ -41,7 +41,9 @@ for (auto letter : word)
 return order;
 ```
 
-Now this formula will produce a distinct value for each string, however, they will not be in order. We can't then sort the strings based on their number value. Ex: "apple" will be greater than the value for "z". So how do we fix this? What if we give the first letter the greatest value?
+Now this formula will produce a distinct value for each string, however, they will not be in order. We can't then sort the strings based on their number value. Ex: "apple" will be greater than the value for "z". So how do we fix this? 
+
+What if we give the first letter the greatest value?
 
 How do we do this? We can add the following to the number value:
 
