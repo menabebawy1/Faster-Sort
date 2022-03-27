@@ -2,7 +2,7 @@
 
 Ever since I took my first Data Structures and Algorithms course, I became fascinated with sorting algorithms. And given that sorting algorithms are a dozen a dime, I thought to myself, "Why not create my own?". This project is exactly an attempt at that. If you want the final version of this algorithm scroll all the way to the bottom. But for now, let's start with the seed idea that sparked the new algorithm.
 
-### Idea #1: sorting numbers is faster than sorting strings. So, if we could come up with a way to convert strings to numbers, we could theoratically sort them much faster.
+### Version 1.0: sorting numbers is faster than sorting strings. So, if we could come up with a way to convert strings to numbers, we could theoratically sort them much faster.
 
 When comparing strings such as Apple and Application, we have to go all the way to the 5th letter to realize that 'e' is less than 'i' and therefore Apple is less than Application. However, if these words were converted to a number the comparison would be instant.
 
@@ -131,6 +131,119 @@ So what are the resutls?
 I ran the results for values up to 17 million and found our new NumSort to be much faster than QuickSort. When dividing the run time of QuickSort by NumSort we see that we take about half the time! Which means our algorithm is twice as fast:
 
 ![Chart for NumSort](/images/numsortchart.png)
+
+Now this ofcourse will work for any string that is up to 26 charachters long, anything bigger than that and it won't fit into our __int128. That is great so far, but it can be improved.
+
+So how can we uses this strategy to better sort strings without a limitation on its length? Answer: Instead of completely converting the string into an integer value, we can convert the first smaller part of it. This will give strings of similar length, a similar value. We can then put these strings together into buckets, and then sort these buckets. Once we do that, it should theoratically make the algorithm much faster. Instaed of O(nlog(n)), if the words are distributed well, we should have arun time of O(nlog(n)/k) where k is the number of buckets.
+
+### Version 2.0: Instaed of completely converting the string to integers, we partially convert them and put them into buckets based on the resulting value.
+
+So we use the same strategy as before to convert the first few letters of each string into a number. But how many is the first few and how many buckets should we have?
+
+Well, let's look at the following:
+
+```
+1st charachter = 26^1 = 26 buckets
+2nd charachter = 26^2 = 676 buckets
+3rd charachter = 26^3 = 17576 buckets
+4th charachter = 26^4 = 456976 buckets
+5th charachter = 26^5 = 11881376 buckets
+6th charachter = 26^6 = 308915776 buckets
+```
+As we increase the number of charachters we calculate, we exponentially increase the number of buckets. So how many buckets should we have? well let's test all of them and see what's fastest and uses the most reasonable amount of space. I am going to increase the word number to a 100,000,000 this time to get a more accurate picture, since this algorithm should be able to sort strings of any size.
+
+First let's figure out our algorithm:
+1. Create out buckets (vector of linkedlists), I am using linkedlists as to avoid extra memory usage.
+2. Partially compute the integer value for each string and add them into their proper bucket.
+3. Sort the buckets
+4. Copy the results into the original vector to be sorted.
+
+
+Here is the algorithm using the first 4 charachters of each string:
+
+```
+void bucketSort4l(vector<string> &strings){
+	int size = 4;
+	vector<list<string>> buckets(pow(26,size));
+	int num;
+	for(auto string: strings){
+		num = 0;
+		for(int i = 0; i < string.length() && i < size; i++){
+			num += (string[i]-'a')*pow(26, size-i-1);
+		}
+		buckets[num].push_back(string);
+	}
+	int index = 0;
+	for(auto list: buckets){
+		list.sort();
+		for(auto itr = list.begin(); itr != list.end(); itr++){
+			strings[index] = *itr;
+			index++;
+		}
+	}
+}
+```
+
+So what are the results for each char value? Here:
+
+![Data for Char](/images/chardata.png)
+
+![Chart for Char](/images/charchart.png)
+
+As we can be seen, based on this data, chars 3, 4, & 5 seem to be optimal with char 4 having the best performance out of all of them. So I will choose this size to continue to experiment with.
+
+Now before testing this algorithm, against the C++ STL QuickSort, I want to experiment further with it. I feel that it should perform much faster. But why is it slower? I believe sorting a linkedlist takes more time due to the cost of traversing the list.
+
+### Version 3.0: Instaed of having linkedlist buckets, we will have vector buckets to see if speed improves.
+
+This is a very simple change, substitute the linkedlists with vectors and see how it changes the time. We should get the following algorithm:
+
+```
+void bucketSort4v(vector<string> &strings){
+	int size = 4;
+	vector<vector<string>> buckets(pow(26,size));
+	int num;
+	for(auto string: strings){
+		num = 0;
+		for(int i = 0; i < string.length() && i < size; i++){
+			num += (string[i]-'a')*pow(26, size-i-1);
+		}
+		buckets[num].push_back(string);
+	}
+	int index = 0;
+	for(auto list: buckets){
+		sort(list.begin(), list.end());
+		for(auto num: list){
+			strings[index] = num;
+			index++;
+		}
+	}
+}
+```
+
+Now, let's look at the run time with a vector vs a linkedlist:
+
+
+![Data for Char](/images/vectorlistdata.png)
+
+![Chart for Char](/images/vectorlistchart.png)
+
+Based on this data, having vectors for buckets is much faster than linkedlists, especially as the number of words increase.
+
+We will stick with the implementation of a vector of vectors. Let's now compare the speed of this algorithm to the C++ STL QuickSort:
+
+
+
+![Data for Char](/images/vectorlistdata.png)
+
+![Chart for Char](/images/vectorlistchart.png)
+
+
+
+
+
+
+
 
 
 
