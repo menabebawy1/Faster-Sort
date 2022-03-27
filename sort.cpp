@@ -269,7 +269,6 @@ void bucketSort4h(vector<string> &strings){
 			}
 		}
 	}
-	cout << "Bucket Size: " << buckets.size() << " ";
 }
 
 
