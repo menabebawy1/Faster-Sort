@@ -203,6 +203,7 @@ As we can be seen, based on this data, chars 3, 4, & 5 seem to be optimal with c
 Now before testing this algorithm, against the C++ STL QuickSort, I want to experiment further with it. I feel that it should have performed faster. But why is it slower? I believe sorting a linkedlist takes more time due to the cost of traversing the list. This takes us to the next improvement!
 
 ### Version 3.0: Instaed of having linkedlist buckets, we will have vector buckets to see if speed improves.
+---
 
 This is a very simple change, substitute the linkedlists with vectors and see how it changes the time. We should get the following algorithm:
 
@@ -248,6 +249,7 @@ Based on this data and the graph, we can see that the algorithm is almost twice 
 And now for one final tweak: If you look at our algorithm, it uses (26^4) = 456,976 buckets. So many of our buckets such as bucket 'zzzz' or bucket 'fwbe' will be unused. Although the number of buckets is a constant, it can be greatly decreased.
 
 ### Version 4.0: By changing our buckets container to a hashmap we can greatly decrease the number of buckets.
+---
 
 This is another very simple change. We have optimized so much for run time and not as much for space. We can change this here. Just change our container to a hashmap. Calculate the integer value for each string. If it already exists in the hashmap, then insert it into the proper bucket. If not, then create a new bucket.
 
