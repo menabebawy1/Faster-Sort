@@ -10,9 +10,10 @@ When comparing strings such as Apple and Application, we have to go all the way 
 
 So how do we convert a string to a number, specifically to an integer?
 
-Well let's start with an excel sheet, that's where I got the idea, that's right an excel sheet. In excel sheets you have columns that are ordered by letters A...Z, AA, AB, etc..
+Well let's start with an excel sheet; that's where I got the idea. That's right, an excel sheet. In excel sheets you have columns that are ordered by letters A...Z, AA, AB, etc..
 
-So how do we get there? Let's take a look at the examples:
+What if they were numbers instead of letters? What would they look like? 
+Let's take a look at the example:
 
 ```
 A = 1
