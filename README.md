@@ -133,17 +133,20 @@ So what are the resutls?
 
 ![Data for NumSort](/images/numsortdata.png)
 
-I ran the results for values up to 17 million and found our new NumSort to be much faster than QuickSort. When dividing the run time of QuickSort by NumSort we see that we take about half the time! Which means our algorithm is twice as fast:
+I ran the results for values up to 17 million and found our new NumSort to be much faster than QuickSort. When dividing the run time of QuickSort by NumSort we see that it takes about half the time on average! Which means our algorithm is twice as fast!
 
 ![Chart for NumSort](/images/numsortchart.png)
 
-Now this ofcourse will work for any string that is up to 26 charachters long, anything bigger than that and it won't fit into our __int128. That is great so far, but it can be improved.
+Now this ofcourse will only work for any string that is up to 26 charachters long, anything bigger than that and it won't fit into our __int128. That is great so far, but it can be improved.
 
-So how can we uses this strategy to better sort strings without a limitation on its length? Answer: Instead of completely converting the string into an integer value, we can convert the first smaller part of it. This will give strings of similar length, a similar value. We can then put these strings together into buckets, and then sort these buckets. Once we do that, it should theoratically make the algorithm much faster. Instaed of O(nlog(n)), if the words are distributed well, we should have arun time of O(nlog(n)/k) where k is the number of buckets.
+So how can we uses this strategy to better sort strings without a limitation on its length? Answer: Instead of completely converting the string into an integer value, we can convert the first smaller part of it. This will give strings of similar length, a similar value. We can then put these strings together into buckets, and then sort these buckets. Once we do that, it should theoratically make the algorithm much faster. Instaed of the O(nlog(n)) run time, if the words are distributed well, we should have a run time of O(nlog(n)/k), where k is the number of buckets.
 
 ### Version 2.0: Instaed of completely converting the string to integers, we partially convert them and put them into buckets based on the resulting value.
+--- 
 
-So we use the same strategy as before to convert the first few letters of each string into a number. But how many is the first few and how many buckets should we have?
+So we use the same strategy as before to convert the first few letters of each string into a number.
+If we only group the strings by their first charachter we will have 26 different buckets since we only have 26 charachers.
+But how many letters is the first few, and how many buckets should we have?
 
 Well, let's look at the following:
 
@@ -155,13 +158,13 @@ Well, let's look at the following:
 5th charachter = 26^5 = 11881376 buckets
 6th charachter = 26^6 = 308915776 buckets
 ```
-As we increase the number of charachters we calculate, we exponentially increase the number of buckets. So how many buckets should we have? well let's test all of them and see what's fastest and uses the most reasonable amount of space. I am going to increase the word number to a 100,000,000 this time to get a more accurate picture, since this algorithm should be able to sort strings of any size.
+As we increase the number of charachters used to calculate our integer, we exponentially increase the number of buckets. So how many buckets should we have? well let's test all bucket sizes and see which is the fastest and which uses the most reasonable amount of space. I am going to increase the word number to a 100,000,000 this time to get a more accurate picture since this algorithm should be able to sort strings of any size.
 
 First let's figure out our algorithm:
-1. Create out buckets (vector of linkedlists), I am using linkedlists as to avoid extra memory usage.
-2. Partially compute the integer value for each string and add them into their proper bucket.
+1. Create out buckets (vector of linkedlists), I am using linkedlists as to avoid extra memory usage
+2. Partially compute the integer value for each string and add them into their proper bucket
 3. Sort the buckets
-4. Copy the results into the original vector to be sorted.
+4. Copy the results into the original vector
 
 
 Here is the algorithm using the first 4 charachters of each string:
@@ -197,7 +200,7 @@ So what are the results for each char value? Here:
 
 As we can be seen, based on this data, chars 3, 4, & 5 seem to be optimal with char 4 having the best performance out of all of them. So I will choose this size to continue to experiment with.
 
-Now before testing this algorithm, against the C++ STL QuickSort, I want to experiment further with it. I feel that it should perform much faster. But why is it slower? I believe sorting a linkedlist takes more time due to the cost of traversing the list.
+Now before testing this algorithm, against the C++ STL QuickSort, I want to experiment further with it. I feel that it should have performed faster. But why is it slower? I believe sorting a linkedlist takes more time due to the cost of traversing the list. This takes us to the next improvement!
 
 ### Version 3.0: Instaed of having linkedlist buckets, we will have vector buckets to see if speed improves.
 
@@ -228,7 +231,6 @@ void bucketSort4v(vector<string> &strings){
 
 Now, let's look at the run time with a vector vs a linkedlist:
 
-
 ![Data for Char](/images/vectorlistdata.png)
 
 ![Chart for Char](/images/vectorlistchart.png)
@@ -237,15 +239,13 @@ Based on this data, having vectors for buckets is much faster than linkedlists, 
 
 We will stick with the implementation of a vector of vectors. Let's now compare the speed of this algorithm to the C++ STL QuickSort:
 
-
-
 ![Data for Char](/images/hashdata.png)
 
 ![Chart for Char](/images/hashchart.png)
 
 Based on this data and the graph, we can see that the algorithm is almost twice as fast and it works for all strings, not just ones that are up to 26 charachters!
 
-And now for one final tweak: If you look at our algorithm it uses (26^4) = 456976 buckets. So many of our buckets such as bucket 'zzzz' or bucket 'kaaa' will be unused. Although the number of buckets is a constant, it can be greatly decreased.
+And now for one final tweak: If you look at our algorithm, it uses (26^4) = 456,976 buckets. So many of our buckets such as bucket 'zzzz' or bucket 'fwbe' will be unused. Although the number of buckets is a constant, it can be greatly decreased.
 
 ### Version 4.0: By changing our buckets container to a hashmap we can greatly decrease the number of buckets.
 
@@ -288,12 +288,15 @@ Now, how is the run time?
 
 ![Chart for Char](/images/mapchart.png)
 
-Admittedly the algorithm is about 20% slower due to accessing the hashmap. Although, it is theoratically O(1) same as a vector O(1). In practice, it is slightly slower. However, our number of buckets for each data point has gone down to about 10,000 buckets. That's about 46x less space.
+Admittedly the algorithm is about 20% slower than the vector container due to accessing the hashmap. Although, it is theoratically O(1) same as a vector O(1). In practice, it is slightly slower. However, our number of buckets for each data point has gone down to about 10,000 buckets every time we run it. That's about 46x less buckets.
 
+This is great! I created an algorithm that is twice as fast!
 
 Final thoughts:
-Is QuickSort now disposable? Ofcourse not, the answer is "It depends". What is the user looking for?
+Is QuickSort now disposable? Ofcourse no!, The answer ism "It depends". What is the user looking for?
 
 - If the user is constrained by space, they can use QuickSort which is quite fast and uses only O(log(n)) space.
-- But, if the user is looking for speed, they can use version 3.0 of this algorithm and achieve maximum speed with a space complexity of O(n).
+- But, if the user is looking for maximum speed, they can use version 3.0 of this algorithm and achieve maximum speed with a space complexity of O(n).
 - Finally if the user is looking for something in between, they can use version 4.0 which is faster than QuickSort and uses less space than Version 3.0 of the algorithm.
+
+Overall, I'd say this was quiet a nice tunrnout.
