@@ -6,7 +6,7 @@ Ever since I took my first Data Structures and Algorithms course, I became fasci
 ---
 
 
-When comparing strings such as Apple and Application, we have to go all the way to the 5th letter to realize that 'e' is less than 'i' and therefore Apple is less than Application. However, if these words were converted to a number the comparison would be instant.
+When comparing strings such as Apple and Application, we have to go all the way to the 5th letter to realize that 'e' is less than 'i' and therefore Apple is less than Application. However, if these words were converted to a number, the comparison would be instant.
 
 So how do we convert a string to a number, specifically to an integer?
 
